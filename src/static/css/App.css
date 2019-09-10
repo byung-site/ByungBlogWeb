@@ -31,3 +31,23 @@
     transform: rotate(360deg);
   }
 }
+
+.link{
+  color:rgb(147,150,153);
+}
+
+.link:hover{
+  color:rgb(193,195,197);
+}
+
+.buttonLink{
+  background-color: transparent;
+  border: none;
+}
+/* .btn-link:focus{
+  border: none;
+} */
+.footer{
+  padding-top: 20px;
+  width: 600px;
+}
