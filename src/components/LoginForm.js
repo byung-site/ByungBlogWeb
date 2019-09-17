@@ -5,22 +5,22 @@ import { Form, Icon, Input, Button, Checkbox, message} from 'antd';
 import "../static/css/LoginForm.less"
 import {AjxRequest} from "../utils/AJXRequest"
 
-
-
 message.config({
   duration: 2,
   maxCount: 1,
 });
 
 class LoginFormComp extends React.Component {
+  // constructor(props){
+  //   super(props);
+  // }
 
-  loginCallback = (isSuccess, data) =>{
+  loginCallback = (data) =>{
     var setFields = this.props.form.setFields;
+    var loginSuccess = this.props.loginSuccess;
 
-    if(isSuccess === true){
-    
-      //登录成功消息发布
-      // PubSub.publish('loginSuccess', data);
+    if(data.code === 0){
+      loginSuccess(data.message);
 
       //清空邮箱和密码输入
       setFields({
@@ -30,10 +30,10 @@ class LoginFormComp extends React.Component {
         email:{
           value: "",
         },
-        });
-    }else if(isSuccess === false){
+      });
+    }else {
       //全局错误消息提示
-      message.error(data);
+      message.error(data.message);
 
       //清空密码输入
       setFields({

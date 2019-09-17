@@ -13,9 +13,9 @@ import {
   DropdownToggle, 
   DropdownMenu
  } from 'reactstrap';
- import { } from 'reactstrap';
+ import jwt_decode from 'jwt-decode'
 
-
+ import {OpCookies} from "./utils/OPCookies"
 import "./static/css/App.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {menuGenerator} from "./utils/MenuGenerator"
@@ -36,10 +36,19 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
 
+    var isLogin = false;
+    var user = this.loadToken();
+    if(user != null){
+      isLogin = true;
+    }else{
+      user = {};
+    }
+
     this.state = {
       isOpen: false,
-      isLogin:true,
+      isLogin: isLogin,
       dropdownOpen: false,
+      user: user
     };
   }
 
@@ -49,8 +58,33 @@ export default class App extends React.Component {
     });
   }
 
+  onLoginStateChange = (state, data) =>{
+    if(state === "login"){
+      this.setState({
+        user: data,
+        isLogin: true
+      });
+    }else if(state === "logout"){
+      this.setState({
+        user: {},
+        isLogin: false
+      });
+    }
+  }
+
+
+  loadToken = () => {
+    let token = OpCookies.get("token");
+    if(token == null){
+        return null;
+    }
+    //解析jwt token
+    const decoded = jwt_decode(token);
+    return decoded
+  }
+
   render() {
-    var {isLogin} = this.state;
+    var {isLogin, user} = this.state;
 
     return (
       <div style={{minWidth:"320px"}}>
@@ -70,16 +104,26 @@ export default class App extends React.Component {
                                 </DropdownToggle>
                                 <DropdownMenu>
                                   {
-                                    item.itemArray.map(subitem => <Button key={subitem.key} color="link"><Link className="link" to={subitem.href}>{subitem.text}</Link></Button>)
+                                    item.itemArray.map(subitem => {
+                                      let obj = {
+                                        pathname: subitem.href,
+                                        search: '?id='+user.id,
+                                      }
+                                      return <Button key={subitem.key} color="link"><Link className="link" to={obj}>{subitem.text}</Link></Button>
+                                    })
                                   }
                                 </DropdownMenu>
                               </UncontrolledDropdown>
                         );
                       }
+                      let obj = {
+                        pathname: item.href,
+                        query: { user }
+                      }
                       return (
                         <NavItem key={item.key} style={{textAlign:"center"}}>
                             <Button color="link">
-                              <Link className="link" to={item.href}>{item.text}</Link>
+                              <Link className="link" to={obj}>{item.text}</Link>
                             </Button>
                         </NavItem>
                       );
@@ -88,7 +132,7 @@ export default class App extends React.Component {
                 </Nav>
 
                 <div style={{marginLeft:"10px", textAlign:"center"}}>
-                  <LoginRegister/>
+                  <LoginRegister loginStateChange={this.onLoginStateChange} isLogin={isLogin} user={user}/>
                 </div>
               </Collapse>
           </Navbar>

@@ -11,18 +11,10 @@ class AJXRequest{
         // };
 
         Axios.post(path, fromData).then(function (response) {
-            callback(true, response.data);
+            callback(response.data);
         })
         .catch(function (error) {
-            if(typeof error.response != "undefined"){
-                if(error.response.status !== 404){
-                     callback(false, error.response.data);
-                }else{
-                    console.log(error.response);
-                }
-            }else{
-                //console.log(error);
-            }
+            console.log(error);
         });
     }
 
@@ -30,18 +22,10 @@ class AJXRequest{
     getRequest = (path, callback) => {
         Axios.get(path)
           .then(function (response) {
-            callback(true, response.data);
+            callback(response.data);
           })
           .catch(function (error) {
-            if(typeof error.response != "undefined"){
-                if(error.response.status !== 404){
-                     callback(false, error.response.data);
-                }else{
-                    console.log(error.response);
-                }
-            }else{
-                //console.log(error);
-            }
+            console.log(error);
           });
     }
 
@@ -102,18 +86,28 @@ class AJXRequest{
     }
 
     //添加话题
-    addTopic = (userId, topic, callback) =>{
+    addTopic = (topicId, userId, topic, callback) =>{
         var fromData = new FormData();
 
-        fromData.append('topic', topic);
+        fromData.append('name', topic);
+        fromData.append('topicId', topicId);
         fromData.append('userId', userId);
 
-        this.postRequest("/addTopic", fromData, callback);
+        this.postRequest("/api/addTopic", fromData, callback);
     }
 
     //得到指定用户ID的所有话题
     getTopicsByUserID = (userId, callback) => {
-        this.getRequest("/getTopicsByUserID/"+userId, callback);
+        this.getRequest("/api/getTopicsByUserID/"+userId, callback);
+    }
+
+    //删除话题
+    deleteTopic = (topicId, callback) =>{
+        var fromData = new FormData();
+
+        fromData.append('topicId', topicId);
+
+        this.postRequest("/api/deleteTopic", fromData, callback);
     }
 
     //删除文章

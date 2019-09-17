@@ -3,7 +3,7 @@ import {
     Form,
     Input,
     Icon,
-    Checkbox,
+    message,
     Button
   } from 'antd';
   import "../static/css/RegisterForm.less"
@@ -20,14 +20,15 @@ class RegistrationForm extends React.Component {
 
   handleSubmit = e => {
     var setFields = this.props.form.setFields;
-    var {registerResult} = this.props;
+    var {registerSuccess} = this.props;
 
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if(!err){
-        AjxRequest.registerRequest(values.nickname, values.email, values.password, values.confirm, (isSuccess, data) => {
-          if(isSuccess){
-            registerResult("ok");
+        AjxRequest.registerRequest(values.nickname, values.email, values.password, values.confirm, (data) => {
+          if(data.code === 0){
+            registerSuccess();
+            message.success(data.message)
             //清空输入
             setFields({
               email:{
@@ -44,7 +45,7 @@ class RegistrationForm extends React.Component {
               }, 
               });
           }else{
-            registerResult(data);
+            message.error(data.message)
           }
         });
       }
@@ -92,7 +93,7 @@ class RegistrationForm extends React.Component {
             ],
           })(<Input 
                 prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                placeholder="email"
+                placeholder="邮箱"
             />)}
         </Form.Item>
         <Form.Item hasFeedback>
@@ -109,7 +110,7 @@ class RegistrationForm extends React.Component {
           })(<Input 
                 prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                 type="password"
-                placeholder="Password"
+                placeholder="密码"
             />)}
         </Form.Item>
         <Form.Item  hasFeedback>
@@ -126,7 +127,7 @@ class RegistrationForm extends React.Component {
           })(<Input
                 prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                 type="password"
-                placeholder="Confirm password"
+                placeholder="验证密码"
            onBlur={this.handleConfirmBlur} />)}
         </Form.Item>
         <Form.Item>
@@ -134,19 +135,10 @@ class RegistrationForm extends React.Component {
             rules: [{ required: true, message: '请输入你的昵称!', whitespace: true }],
           })(<Input 
               prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-              placeholder="nickname"
+              placeholder="昵称"
           />)}
         </Form.Item>
        
-        <Form.Item >
-          {getFieldDecorator('agreement', {
-            valuePropName: 'checked',
-          })(
-            <Checkbox>
-              I have read the <a href="/">agreement</a>
-            </Checkbox>,
-          )}
-        </Form.Item>
         <Form.Item >
           <Button type="primary" htmlType="submit" className="register-form-button">
             注册

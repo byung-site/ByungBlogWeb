@@ -1,9 +1,9 @@
 import React from 'react';
-import {Avatar, Button, Modal,Tabs, message } from 'antd';
+import {Avatar, Button, Modal,Tabs } from 'antd';
 // import PubSub from 'pubsub-js'
-// import jwt_decode from 'jwt-decode'
+import jwt_decode from 'jwt-decode'
 
-// import {OpCookies} from "../utils/OPCookies"
+import {OpCookies} from "../utils/OPCookies"
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 
@@ -15,41 +15,41 @@ class LoginRegister extends React.Component{
     constructor(props){
         super(props)
     
-        var isLogin = this.props.isLogin;
+        let {isLogin, user} = this.props;
+
         var loginButtonContent="登录/注册";
+        let avatarUrl = "";
 
         if(isLogin === true){
-            loginButtonContent ="退出登录";
+            loginButtonContent="退出登录";
+            avatarUrl = "/api/viewAvatar/"+user.id+"/"+user.avatar
         }
 
         this.state={
           visible: false,
           currentTab:"login",
           loginButtonContent: loginButtonContent,
-          isLogin: this.props.isLogin,
+          isLogin: isLogin,
+          avatarUrl: avatarUrl
         }
 
     }
 
-    componentWillMount = () =>{
-        // PubSub.subscribe('loginSuccess', this.loginSuccessCallback);
-    }
-
     //登录成功消息回调
-    loginSuccessCallback = (msg, data) =>{
-        let {onLoginStateChange} = this.props;
+    loginSuccess = (msg) =>{
+        let {loginStateChange} = this.props;
 
         //存jwt token为cookie
-        // OpCookies.save("token", data);
-
+        OpCookies.save("token", msg);
         //解析jwt token
-        // const decoded = jwt_decode(data);
+        const decoded = jwt_decode(msg);
+        let avatarUrl = "/api/viewAvatar/"+decoded.id+"/"+decoded.avatar
 
         //通知父组件登录成功
-        // onLoginStateChange(true, decoded);
+        loginStateChange("login", decoded);
 
         //关闭登录窗口
-        this.setState({ visible: false, isLogin: true, loginButtonContent: "退出登录" });
+        this.setState({ avatarUrl: avatarUrl, visible: false, isLogin: true, loginButtonContent: "退出登录" });
     }
 
     //tabs切换tab回调
@@ -62,37 +62,28 @@ class LoginRegister extends React.Component{
 
     //点击登录/注册或退出登录按钮
     loginRegiterButtonClick = e =>{
-        this.setState({
-            visible: true,
-        });
         if(this.state.isLogin === false){//点击登录/注册
             this.setState({
                 visible: true,
             });
         }else if(this.state.isLogin === true){//点击退出登录
-            let {onLoginStateChange} = this.props;
+            let {loginStateChange} = this.props;
 
             ////删除jwt token
-            // OpCookies.del("token");
+            OpCookies.del("token");
 
-            if(typeof onLoginStateChange != "undefined"){
-                onLoginStateChange(false, null);
+            if(typeof loginStateChange != "undefined"){
+                loginStateChange("logout", null);
             }
 
             this.setState({loginButtonContent: "登录/注册录", isLogin: false });
-            window.location.href="/"
         }
       }
 
-      registerResult = (data) => {
-        if(data === "ok"){
-            message.success("注册成功");
-            this.setState({
-                currentTab: "login",
-              });
-        }else{
-            message.error(data);
-        }
+      registerSuccess = () => {
+        this.setState({
+            currentTab: "login",
+        });
       }
 
     //登录注册框关闭
@@ -101,11 +92,11 @@ class LoginRegister extends React.Component{
     };
 
     render(){
-        const {visible, currentTab} = this.state;
+        const {visible, currentTab, avatarUrl} = this.state;
 
         return(
             <div>
-                <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                <Avatar src={avatarUrl} />
                 <Button type="link" onClick={this.loginRegiterButtonClick}>{this.state.loginButtonContent}</Button>
                 <Modal
                 visible={visible}
@@ -116,10 +107,10 @@ class LoginRegister extends React.Component{
                 >
                 <Tabs activeKey={currentTab} onChange={this.tabChange}>
                     <TabPane tab="登录" key="login">
-                        <LoginForm loginSuccessCallback={this.loginSuccessCallback}/>
+                        <LoginForm loginSuccess={this.loginSuccess}/>
                     </TabPane>
                     <TabPane tab="注册" key="register">
-                        <RegisterForm registerResult={this.registerResult}/>
+                        <RegisterForm registerSuccess={this.registerSuccess}/>
                     </TabPane>
                 </Tabs>
             </Modal>
