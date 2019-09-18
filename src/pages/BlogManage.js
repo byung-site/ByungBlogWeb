@@ -1,6 +1,6 @@
 import React from 'react';
 import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
-import { List, Avatar, Icon, Select, BackTop } from 'antd';
+import { List, Avatar, Icon, Select, BackTop, Button } from 'antd';
 
 import '../static/css/common.css';
 import DocumentTitle from '../components/DocumentTitle'
@@ -57,11 +57,14 @@ export default class BlogManage extends React.Component {
                         <BreadcrumbItem>博客管理</BreadcrumbItem>
                     </Breadcrumb>
                     <div >
-                        <Select defaultValue="全部" style={{ width: 290 }} onChange={this.handleChange}>
+                        <Select defaultValue="全部" style={{ marginRight: "20px", marginBottom: "20px", width: 290 }} onChange={this.handleChange}>
                         <Option value="all">全部</Option>
                         <Option value="published">已发布</Option>
                         <Option value="draft">草稿</Option>
                         </Select>
+                        <Button  type="primary" style={{width: 290 }} onClick={e => {
+                            this.props.history.push('/edit?id=0')
+                        }}>编写博客</Button>
                     </div>
                     <div style={{marginTop:"20px"}}>
                         <List

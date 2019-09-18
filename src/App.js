@@ -27,6 +27,7 @@ import BlogManage from './pages/BlogManage';
 import TopicManage from './pages/TopicManage';
 import NotFound from './pages/NotFound';
 import NoAuth from './pages/NoAuth';
+import Edit from './pages/Edit';
 import AuthRouter from "./components/AuthRouter"
 import LoginRegister from "./components/LoginRegister"
 
@@ -144,6 +145,7 @@ export default class App extends React.Component {
                 <AuthRouter path="/blogmanage" isLogin={isLogin} component={BlogManage}/>
                 <AuthRouter path="/topicmanage" isLogin={isLogin} component={TopicManage}/>
                 <AuthRouter path="/personal" isLogin={isLogin} component={Personal}/>
+                <AuthRouter path="/edit" isLogin={isLogin} component={Edit}/>
                 <Route exact path="/noauth" component={NoAuth}/>
                 <Route exact path="/about" component={About}/>
                 <Route component={NotFound}/>
