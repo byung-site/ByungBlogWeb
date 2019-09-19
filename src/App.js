@@ -28,6 +28,7 @@ import TopicManage from './pages/TopicManage';
 import NotFound from './pages/NotFound';
 import NoAuth from './pages/NoAuth';
 import Edit from './pages/Edit';
+import Detail from "./pages/Detail"
 import AuthRouter from "./components/AuthRouter"
 import LoginRegister from "./components/LoginRegister"
 
@@ -142,12 +143,13 @@ export default class App extends React.Component {
             <Switch>
                 <Route exact path="/" component={Blog}/>
                 <Route exact path="/topic" component={Topic}/>
+                <Route exact path="/detail" component={Detail}/>
+                <Route exact path="/noauth" component={NoAuth}/>
+                <Route exact path="/about" component={About}/>
                 <AuthRouter path="/blogmanage" isLogin={isLogin} component={BlogManage}/>
                 <AuthRouter path="/topicmanage" isLogin={isLogin} component={TopicManage}/>
                 <AuthRouter path="/personal" isLogin={isLogin} component={Personal}/>
                 <AuthRouter path="/edit" isLogin={isLogin} component={Edit}/>
-                <Route exact path="/noauth" component={NoAuth}/>
-                <Route exact path="/about" component={About}/>
                 <Route component={NotFound}/>
             </Switch>
         </Container>

@@ -63,7 +63,7 @@ export default class BlogManage extends React.Component {
                         <Option value="draft">草稿</Option>
                         </Select>
                         <Button  type="primary" style={{width: 290 }} onClick={e => {
-                            this.props.history.push('/edit?id=0')
+                            this.props.history.push('/edit?key=');
                         }}>编写博客</Button>
                     </div>
                     <div style={{marginTop:"20px"}}>

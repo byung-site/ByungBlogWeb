@@ -136,7 +136,7 @@ class AJXRequest{
 
     //获得一个key
     getNewKey = (callback) => {
-        this.getRequest("/createKey", callback)
+        this.getRequest("/api/createKey", callback)
     }
 
     //保存文章
@@ -152,11 +152,11 @@ class AJXRequest{
         fromData.append('content', article.Content);
         fromData.append('image', article.Image);
 
-        this.postRequest("/saveArticle", fromData, callback);
+        this.postRequest("/api/saveArticle", fromData, callback);
     }
 
     //保存同时发布文章
-    saveAndPublishArticle = (article, callback) => {
+    publishArticle = (article, callback) => {
         let fromData = new FormData();
 
 
@@ -168,7 +168,7 @@ class AJXRequest{
         fromData.append('content', article.Content);
         fromData.append('image', article.Image);
 
-        this.postRequest("/saveAndPublish", fromData, callback);
+        this.postRequest("/api/publishArticle", fromData, callback);
     }
 
 
@@ -187,7 +187,7 @@ class AJXRequest{
         fromData.append('userId', userId);
         fromData.append('file', file);
         fromData.append('key', articleKey);
-        this.postRequest("/uploadArticleImage", fromData, callback);
+        this.postRequest("/api/uploadArticleImage", fromData, callback);
     }
 
     //改昵称
