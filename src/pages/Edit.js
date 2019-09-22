@@ -1,13 +1,17 @@
 import React, { Component } from 'react'
-import { Input, Button, message } from 'antd';
+import { Input, Button, message, Select } from 'antd';
 import MdEditor from 'react-markdown-editor-lite'
 import MarkdownIt from 'markdown-it'
 import jwt_decode from 'jwt-decode'
+import hljs  from 'highlight.js'
+import 'highlight.js/styles/github.css';
 
 import DocumentTitle from '../components/DocumentTitle'
 import {AjxRequest} from "../utils/AJXRequest"
 import {OpCookies} from "../utils/OPCookies"
 import {localParam} from "../utils/LocalParam"
+
+const { Option } = Select;
 
 class Edit extends Component {
     mdParser = null
@@ -22,7 +26,8 @@ class Edit extends Component {
         }
 
         this.state={
-            article:{UserID:0, TopicID:0, Key: param.key, Content:"", Title:"", Summary:"test", Image:""},
+            article:{UserID:0, TopicID:0, Key: param.key, Content:"", Title:"", Summary:"", Image:""},
+            topics:[],
             user,
         };
 
@@ -30,13 +35,34 @@ class Edit extends Component {
         this.mdParser = new MarkdownIt({
             html: true,
             linkify: true,
-            typographer: true
+            typographer: true,
+            highlight: function (str, lang) {
+                if (lang && hljs.getLanguage(lang)) {
+                  try {
+                    return hljs.highlight(lang, str).value;
+                  } catch (__) {}
+                }
+            
+                return ''; // 使用额外的默认转义
+              }
         })
     }
 
-    componentDidMount(){
-        var {article} = this.state;
+    componentWillMount(){
+        var {article, user} = this.state;
 
+        //得到本用户所有话题
+        AjxRequest.getTopicsByUserID(user.id, data=>{
+            if(data.code === 0){
+                this.setState({
+                    topics: data.message
+                });
+            }else{
+                message.error(data.message);
+            }
+        });
+
+        //读取文章或获取key
         if(article.Key === ""){
             AjxRequest.getNewKey(data=>{
                 if(data.code === 0){
@@ -55,6 +81,15 @@ class Edit extends Component {
                 }
             });
         }
+    }
+
+    getSummary = (markdownString) => {
+        var htmlStr = this.mdParser.render(markdownString);
+        var dd=htmlStr.replace(/<\/?.+?>/g,"");
+        var dds=dd.replace(/ /g,"");//剔除空格
+        var summary = dds.replace(/[\r\n]/g,"").substring(0, 200);//剔除换行符和截取前200字符
+        
+        return summary;
     }
 
     loadToken = () => {
@@ -97,9 +132,19 @@ class Edit extends Component {
         });
     }
 
+    topicChange = (value) =>{
+        let {article} = this.state;
+
+        article.TopicID = value;
+        this.setState({
+            article,
+        });
+    }
+
     saveArticle = (e) =>{
         let {article} = this.state;
 
+        article.Summary = this.getSummary(article.Content)
         AjxRequest.saveArticle(article, data=>{
             console.log(data)
             if(data.code === 0){
@@ -113,6 +158,7 @@ class Edit extends Component {
     publishArticle = (e) =>{
         let {article} = this.state;
 
+        article.Summary = this.getSummary(article.Content)
         AjxRequest.publishArticle(article, data=>{
             console.log(data)
             if(data.code === 0){
@@ -125,20 +171,32 @@ class Edit extends Component {
     }
 
     render() {  
-       let {article} = this.state;
+       let {article, topics} = this.state;
 
         return (
             <DocumentTitle title='编辑'>
                 <div>
                     <div>
                         <div style={{textAlign:"center", marginTop:"20px"}}>
-                            <Input style={{maxWidth:"400px", marginBottom:"20px"}}
+                            <Select 
+                            placeholder="话题选择"
+                            maxTagCount={10}
+                            maxTagTextLength={10}
+                            onChange={this.topicChange}
+                            style={{ minWidth:"280px", maxWidth: "400px",marginRight:"20px", marginBottom:"20px" }} >
+                                {
+                                    topics.map(item=>{
+                                        return <Option key={item.ID} value={item.ID}>{item.Name}</Option>
+                                    })
+                                }
+                            </Select>
+                            <Input style={{ minWidth:"280px", maxWidth:"400px", marginBottom:"20px"}}
                                 onChange={this.titleInputChange}
                                 value={article.Title}
                                 placeholder="请输入标题"
                             />
                         </div>
-                        <div style={{height: "500px"}}>
+                        <div style={{height: "500px", minWidth:"280px"}}>
                             <MdEditor
                             config={{
                                 view: {
