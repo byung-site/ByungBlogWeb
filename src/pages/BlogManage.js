@@ -1,22 +1,11 @@
 import React from 'react';
 import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
-import { List, Avatar, Icon, Select, BackTop, Button } from 'antd';
+import { List, Avatar, Icon, Select, BackTop, Button, message } from 'antd';
 
 import '../static/css/common.css';
 import DocumentTitle from '../components/DocumentTitle'
-
-const listData = [];
-for (let i = 0; i < 23; i++) {
-  listData.push({
-    href: 'http://ant.design',
-    title: `ant design part ${i}`,
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    description:
-      'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-    content:
-      'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-  });
-}
+import {localParam} from "../utils/LocalParam"
+import {AjxRequest} from "../utils/AJXRequest"
 
 const IconText = ({ type, text }) => (
     <span>
@@ -31,18 +20,54 @@ export default class BlogManage extends React.Component {
     constructor(props){
         super(props);
 
+        let param = localParam(this.props.location.search);
+        if(typeof param.id === "undefined"){
+            param = {id:0};
+        }
+
         this.state={
-            blogs: listData,
+            blogs: [],
+            filter: "all",
             total: 0,
-            pageSize: 10
+            pageSize: 10,
+            userID: param.id
         };
+    }
+
+    componentWillMount(){
+        let {userID} = this.state;
+
+        AjxRequest.getArticlesByUserID(userID, data=>{
+            console.log(data);
+            if(data.code === 0){
+                this.setState({
+                    blogs: data.message,
+                    total: data.message.length
+                });
+            }else{
+                message.error(data.message);
+            }
+        });
+    }
+
+    deleteBlog = (id) =>{
+        let {blogs} = this.state;
+
+        blogs.forEach((item, index, blogs)=>{
+            if(item.ID === id) {
+                blogs.splice(index, 1);
+                this.setState({
+                    blogs
+                });
+            }
+        });
     }
 
     callback = (key) => {
         console.log(key);
     }
 
-    handleChange = (value) => {
+    handleSelectChange = (value) => {
         console.log(`selected ${value}`);
       }
 
@@ -57,7 +82,7 @@ export default class BlogManage extends React.Component {
                         <BreadcrumbItem>博客管理</BreadcrumbItem>
                     </Breadcrumb>
                     <div >
-                        <Select defaultValue="全部" style={{ marginRight: "20px", marginBottom: "20px", width: 290 }} onChange={this.handleChange}>
+                        <Select defaultValue="全部" style={{ marginRight: "20px", marginBottom: "20px", width: 290 }} onChange={this.handleSelectChange}>
                         <Option value="all">全部</Option>
                         <Option value="published">已发布</Option>
                         <Option value="draft">草稿</Option>
@@ -83,26 +108,38 @@ export default class BlogManage extends React.Component {
                             dataSource={blogs}
                             renderItem={item => (
                                 <List.Item
-                                    key={item.title}
+                                    key={item.ID}
                                     actions={[
-                                    <IconText type="star-o" text="156" key="list-vertical-star-o" />,
-                                    <IconText type="like-o" text="156" key="list-vertical-like-o" />,
-                                    <IconText type="message" text="2" key="list-vertical-message" />,
+                                    <IconText type="read" text={item.Visit} key="list-vertical-star-o" />,
+                                    <Button type="link" icon="edit" onClick={e=>{
+                                        this.props.history.push("/edit?key="+item.Key);
+                                    }}></Button>,
+                                    <Button type="link" icon="delete" onClick={e=>{
+                                        if(window.confirm("确实要删除该\"" + item.Title + "\"吗?")){
+                                            AjxRequest.deleteArticle(item.Key, data=>{
+                                                if(data.code === 0){
+                                                    this.deleteBlog(item.ID);
+                                                    message.success(data.message);
+                                                }else{
+                                                    message.error(data.message);
+                                                }
+                                            });
+                                        }
+                                    }}></Button>,
                                     ]}
                                     extra={
                                     <img
                                         width={272}
                                         alt="logo"
-                                        src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+                                        src={"/api/viewArticleImage/" + item.Image}
                                     />
                                     }
                                 >
                                     <List.Item.Meta
-                                    avatar={<Avatar src={item.avatar} />}
-                                    title={<a href={item.href}>{item.title}</a>}
-                                    description={item.description}
+                                    avatar={<Avatar src={"/api/viewAvatar/"+item.UserID+"/"+item.User.Avatar} />}
+                                    title={<a href={item.href}>{item.Title}</a>}
                                     />
-                                    {item.content}
+                                    <p style={{wordWrap: "break-word"}}>{item.Summary}</p>
                                 </List.Item>
                             )}
                         />

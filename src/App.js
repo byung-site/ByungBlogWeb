@@ -17,7 +17,7 @@ import {
 
  import {OpCookies} from "./utils/OPCookies"
 import "./static/css/App.css"
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "./static/css/bootstrap.min.css"
 import {menuGenerator} from "./utils/MenuGenerator"
 import Blog from "./pages/Blog"
 import Topic from "./pages/Topic.js"
@@ -142,6 +142,7 @@ export default class App extends React.Component {
         <Container>
             <Switch>
                 <Route exact path="/" component={Blog}/>
+                <Route exact path="/blog" component={Blog}/>
                 <Route exact path="/topic" component={Topic}/>
                 <Route exact path="/detail" component={Detail}/>
                 <Route exact path="/noauth" component={NoAuth}/>

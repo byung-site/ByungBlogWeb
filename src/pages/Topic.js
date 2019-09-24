@@ -1,30 +1,45 @@
 import React from 'react';
 import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
-import { List, Typography } from 'antd';
+import { List, message, Icon } from 'antd';
+import {Link} from 'react-router-dom';
 
 import "../static/css/topic.css"
 import DocumentTitle from '../components/DocumentTitle'
+import {AjxRequest} from "../utils/AJXRequest"
 
-const data = [
-    'Racing car sprays burning fuel into crowd.',
-    'Japanese princess to wed commoner.',
-    'Australian walks 100km after outback crash.',
-    'Man charged over missing wedding girl.',
-    'Los Angeles battles huge wildfires.',
-  ];
+  const IconText = ({ type, text }) => (
+    <span>
+      <Icon type={type} style={{ marginRight: 8 }} />
+      {text}
+    </span>
+  );
 
 export default class Topic extends React.Component {
     constructor(props){
         super(props);
 
         this.state = {
-            total: 0,
-            pageSize: 10
+            topicArray:[],
+            pageSize:10,
+            total:0
         };
     }
 
+    componentWillMount(){
+        AjxRequest.getTopics(data=>{
+            if(data.code === 0){
+                this.setState({
+                    topicArray:data.message,
+                    total:data.message.length
+                });
+            }else{
+                message.error(data.message);
+            }
+        });
+    }
+
     render() {
-        var {total, pageSize} = this.state;
+        var {total, pageSize, topicArray} = this.state;
 
         return(
             <DocumentTitle title='话题'>
@@ -33,9 +48,11 @@ export default class Topic extends React.Component {
                         <BreadcrumbItem>话题</BreadcrumbItem>
                     </Breadcrumb>
                     <div className="topic-list">
-                        <List
+                    <List
                             bordered
-                            dataSource={data}
+                            itemLayout="vertical"
+                            size="large"
+                            dataSource={topicArray}
                             pagination={{
                                 onChange: page => {
                                     console.log(page);
@@ -46,8 +63,12 @@ export default class Topic extends React.Component {
                                 position:"bottom"
                             }}
                             renderItem={item => (
-                                <List.Item>
-                                <Typography.Text mark>[ITEM]</Typography.Text> {item}
+                                <List.Item
+                                    actions={[
+                                        <IconText type="book" text={item.ArticleNum} key="list-vertical-star-o" />
+                                    ]}
+                                >
+                                    <Link to={"/?id="+item.ID}>{item.Name}</Link>
                                 </List.Item>
                             )}
                         />

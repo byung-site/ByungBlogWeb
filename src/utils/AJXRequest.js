@@ -67,7 +67,7 @@ class AJXRequest{
 
     //得到指定用户ID的所有文章
     getArticlesByUserID = (userId, callback) => {
-        this.getRequest("/getArticlesByUserID/" + userId, callback);
+        this.getRequest("/api/getArticlesByUserID/" + userId, callback);
     }
 
     //得到发布的所有文章
@@ -77,12 +77,12 @@ class AJXRequest{
 
     //得到指定key的文章
     getArticle = (key, callback) =>{
-        this.getRequest("/getArticle/" + key, callback)
+        this.getRequest("/api/getArticle/" + key, callback)
     }
 
     //得到所有话题
     getTopics = (callback) => {
-        this.getRequest("/getTopics", callback);
+        this.getRequest("/api/getTopics", callback);
     }
 
     //添加话题
@@ -111,13 +111,12 @@ class AJXRequest{
     }
 
     //删除文章
-    deleteArticle = (key, topicId, callback) =>{
+    deleteArticle = (key, callback) =>{
         var fromData = new FormData();
 
         fromData.append('key', key);
-        fromData.append('topicId', topicId);
 
-        this.postRequest("/delArticle", fromData, callback);
+        this.postRequest("/api/delArticle", fromData, callback);
     }
 
     // //管理页面发布文章

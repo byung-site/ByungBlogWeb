@@ -1,5 +1,6 @@
+
 import React, { Component } from 'react'
-import { Input, Button, message, Select } from 'antd';
+import { Input, Button, message, Select, Upload, Icon } from 'antd';
 import MdEditor from 'react-markdown-editor-lite'
 import MarkdownIt from 'markdown-it'
 import jwt_decode from 'jwt-decode'
@@ -26,14 +27,15 @@ class Edit extends Component {
         }
 
         this.state={
-            article:{UserID:0, TopicID:0, Key: param.key, Content:"", Title:"", Summary:"", Image:""},
+            article:{UserID:user.id, TopicID:0, Key: param.key, Content:"", Title:"", Summary:"", Image:""},
             topics:[],
             user,
+            defaultTopic: "话题选择"
         };
 
         // initial a parser
         this.mdParser = new MarkdownIt({
-            html: true,
+            html: false,
             linkify: true,
             typographer: true,
             highlight: function (str, lang) {
@@ -74,9 +76,18 @@ class Edit extends Component {
             });
         }else{
             AjxRequest.getArticle(article.Key, data=>{
+                let {topics, defaultTopic} = this.state;
+
                 if(data.code === 0){
+                    for(var i=0;i<topics.length;i++){
+                        if(topics[i].ID === data.message.TopicID){
+                            console.log(topics[i].Name);
+                            defaultTopic=topics[i].Name;
+                        }
+                    }
                     this.setState({
-                        article: data.message
+                        article: data.message,
+                        defaultTopic: defaultTopic,
                     });
                 }
             });
@@ -86,7 +97,7 @@ class Edit extends Component {
     getSummary = (markdownString) => {
         var htmlStr = this.mdParser.render(markdownString);
         var dd=htmlStr.replace(/<\/?.+?>/g,"");
-        var dds=dd.replace(/ /g,"");//剔除空格
+        var dds=dd.replace(/ /g," ");//剔除空格
         var summary = dds.replace(/[\r\n]/g,"").substring(0, 200);//剔除换行符和截取前200字符
         
         return summary;
@@ -141,6 +152,23 @@ class Edit extends Component {
         });
     }
 
+    uploadAttach = (info) =>{
+        let {article} = this.state;
+
+        if (info.file.status !== 'uploading') {
+            if(info.file.response.code === 0){
+                article.Image = info.file.response.message;
+                this.setState({
+                    article,
+                });
+                message.success(`${info.file.name} 上传成功`);
+            }else{
+                message.error(`${info.file.name} 上传失败`);
+            }
+        }
+    }
+
+
     saveArticle = (e) =>{
         let {article} = this.state;
 
@@ -163,34 +191,35 @@ class Edit extends Component {
             console.log(data)
             if(data.code === 0){
                 message.success(data.message);
-                this.props.history.push("/detail?key="+article.Key+"&title="+article.Title);
+                this.props.history.push("/detail?key="+article.Key);
             }else{
                 message.error(data.message);
             }
         });
     }
 
-    render() {  
-       let {article, topics} = this.state;
 
+    render() {  
+       let {article, topics, user, defaultTopic} = this.state;
+     
         return (
             <DocumentTitle title='编辑'>
                 <div>
                     <div>
                         <div style={{textAlign:"center", marginTop:"20px"}}>
                             <Select 
-                            placeholder="话题选择"
+                            placeholder={defaultTopic}
                             maxTagCount={10}
                             maxTagTextLength={10}
                             onChange={this.topicChange}
-                            style={{ minWidth:"280px", maxWidth: "400px",marginRight:"20px", marginBottom:"20px" }} >
+                            style={{ width: "280px",marginRight:"20px", marginBottom:"20px" }} >
                                 {
                                     topics.map(item=>{
                                         return <Option key={item.ID} value={item.ID}>{item.Name}</Option>
                                     })
                                 }
                             </Select>
-                            <Input style={{ minWidth:"280px", maxWidth:"400px", marginBottom:"20px"}}
+                            <Input style={{ width:"280px", marginRight:"20px", marginBottom:"20px"}}
                                 onChange={this.titleInputChange}
                                 value={article.Title}
                                 placeholder="请输入标题"
@@ -202,8 +231,8 @@ class Edit extends Component {
                                 view: {
                                   menu: true,
                                   md: true,
-                                  html: false
-                                }
+                                  html: true
+                                },
                             }}
                             value={article.Content}
                             renderHTML={(text) => this.mdParser.render(text)}
@@ -213,9 +242,20 @@ class Edit extends Component {
                         </div>
                     </div>
                     <div style={{textAlign:"right", marginTop:"20px", marginBottom:"20px"}}>
-                        <Button type="link">使用说明</Button>
                         <Button type="primary" style={{marginRight:"10px"}} onClick={this.saveArticle}>存稿</Button>
-                        <Button type="primary" onClick={this.publishArticle}>发布</Button>
+                        <Button type="primary" onClick={this.publishArticle} style={{marginRight:"10px"}}>发布</Button>
+                        <Upload
+                            name = 'file'
+                            action = {'/api/uploadArticleAttachImage/'+user.id+"/"+article.Key}
+                            headers = {
+                                {authorization:'authorization-text'}
+                            }
+                            onChange={this.uploadAttach}
+                        >
+                            <Button>
+                            <Icon type="upload" /> 附件上传
+                            </Button>
+                        </Upload>
                     </div>
                 </div>
             </DocumentTitle>
