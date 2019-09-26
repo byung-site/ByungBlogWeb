@@ -6,6 +6,7 @@ import {Link} from 'react-router-dom';
 import '../static/css/common.css';
 import DocumentTitle from '../components/DocumentTitle'
 import {AjxRequest} from "../utils/AJXRequest"
+import {localParam} from "../utils/LocalParam"
 
 const IconText = ({ type, text }) => (
     <span>
@@ -14,39 +15,61 @@ const IconText = ({ type, text }) => (
     </span>
   );
 
-export default class Blog extends React.Component {
+export default class BlogSearch extends React.Component {
     constructor(props){
         super(props);
+
+        let param = localParam(this.props.location.search);
+        if(typeof param === "undefined"){
+            param = {id:"0",topic:"全部"};
+        }
 
         this.state = {
             blogs: [],
             total: 0,
             pageSize: 10,
+            topicId: param.id,
+            topicName: decodeURI(param.topic)
         };
     }
 
     componentWillMount(){
-        AjxRequest.getArticles(data=>{
-            if(data.code === 0){
-                this.setState({
-                    blogs: data.message,
-                    total: data.message.length,
-                });
-            }else{
-                message.error(data.message);
-            }
-        });
+        let {topicId} = this.state;
+
+        if(topicId === "0"){
+            AjxRequest.getArticles(data=>{
+                if(data.code === 0){
+                    this.setState({
+                        blogs: data.message,
+                        total: data.message.length,
+                    });
+                }else{
+                    message.error(data.message);
+                }
+            });
+        }else{
+            AjxRequest.getArticlesByTopicID(topicId,data=>{
+                if(data.code === 0){
+                    this.setState({
+                        blogs: data.message,
+                        total: data.message.length
+                    });
+                }else{
+                    message.error(data.message);
+                }
+            });
+        }
     }
 
     render() {
-        var {blogs, total, pageSize} = this.state;
+        var {blogs, total, pageSize, topicName} = this.state;
 
         return(
             <DocumentTitle title='博客'>
                 <div>
                     <Breadcrumb>
-                        <BreadcrumbItem>博客</BreadcrumbItem>
-                        <BreadcrumbItem>全部</BreadcrumbItem>
+                        <BreadcrumbItem><Link to={"/topic"}>话题</Link></BreadcrumbItem>
+                        <BreadcrumbItem>{topicName}</BreadcrumbItem>
                     </Breadcrumb>
                     <div>
                     <List

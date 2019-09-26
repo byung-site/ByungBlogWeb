@@ -22,7 +22,7 @@ class LoginRegister extends React.Component{
 
         if(isLogin === true){
             loginButtonContent="退出登录";
-            avatarUrl = "/api/viewAvatar/"+user.id+"/"+user.avatar
+            avatarUrl = "/viewAvatar/"+user.id+"/"+user.avatar
         }
 
         this.state={

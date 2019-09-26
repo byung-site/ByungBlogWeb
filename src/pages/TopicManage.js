@@ -1,6 +1,7 @@
 import React from 'react';
 import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
-import { List, Input, Button, message, Icon, Alert, Popconfirm } from 'antd';
+import { List, Input, Button, message, Icon, Popconfirm } from 'antd';
+import {Link} from 'react-router-dom';
 
 import DocumentTitle from '../components/DocumentTitle'
 import {AjxRequest} from "../utils/AJXRequest"
@@ -137,7 +138,7 @@ export default class Manage extends React.Component {
                                             title={'确定要删除"'+ item.Name +'"吗？'}
                                             onConfirm={e => {
                                                 if(item.ArticleNum > 0){
-                                                    Alert("该话题有博客不能删除");
+                                                    alert("该话题有博客不能删除");
                                                     return;
                                                 }
                                                 AjxRequest.deleteTopic(item.ID, this.deleteTopicCallback);
@@ -149,7 +150,7 @@ export default class Manage extends React.Component {
                                         </Popconfirm>,
                                     ]}
                                 >
-                                    {item.Name}
+                                    <Link to={"/blogsearch?id="+item.ID+"&topic="+item.Name}>{item.Name}</Link>
                                 </List.Item>
                             )}
                         />

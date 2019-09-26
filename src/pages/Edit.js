@@ -1,10 +1,12 @@
 
 import React, { Component } from 'react'
+import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import { Input, Button, message, Select, Upload, Icon } from 'antd';
 import MdEditor from 'react-markdown-editor-lite'
 import MarkdownIt from 'markdown-it'
 import jwt_decode from 'jwt-decode'
 import hljs  from 'highlight.js'
+import {Link} from 'react-router-dom';
 import 'highlight.js/styles/github.css';
 
 import DocumentTitle from '../components/DocumentTitle'
@@ -188,7 +190,6 @@ class Edit extends Component {
 
         article.Summary = this.getSummary(article.Content)
         AjxRequest.publishArticle(article, data=>{
-            console.log(data)
             if(data.code === 0){
                 message.success(data.message);
                 this.props.history.push("/detail?key="+article.Key);
@@ -205,6 +206,11 @@ class Edit extends Component {
         return (
             <DocumentTitle title='编辑'>
                 <div>
+                    <Breadcrumb>
+                        <BreadcrumbItem>管理</BreadcrumbItem>
+                        <BreadcrumbItem><Link to={"/blogmanage?id="+user.id}>博客管理</Link></BreadcrumbItem>
+                        <BreadcrumbItem>编辑</BreadcrumbItem>
+                    </Breadcrumb>
                     <div>
                         <div style={{textAlign:"center", marginTop:"20px"}}>
                             <Select 

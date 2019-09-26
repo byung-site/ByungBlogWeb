@@ -71,8 +71,8 @@ class AJXRequest{
     }
 
     //得到发布的所有文章
-    getPublishArticles = (callback) => {
-        this.getRequest("/getPublish", callback);
+    getPublishArticles = (userId, callback) => {
+        this.getRequest("/api/getPublishArticles/"+userId, callback);
     }
 
     //得到指定key的文章
@@ -82,7 +82,7 @@ class AJXRequest{
 
     //得到所有话题
     getTopics = (callback) => {
-        this.getRequest("/api/getTopics", callback);
+        this.getRequest("/getTopics", callback);
     }
 
     //添加话题

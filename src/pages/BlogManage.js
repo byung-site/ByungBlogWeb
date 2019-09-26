@@ -1,6 +1,7 @@
 import React from 'react';
 import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import { List, Avatar, Icon, Select, BackTop, Button, message } from 'antd';
+import {Link} from 'react-router-dom';
 
 import '../static/css/common.css';
 import DocumentTitle from '../components/DocumentTitle'
@@ -21,16 +22,16 @@ export default class BlogManage extends React.Component {
         super(props);
 
         let param = localParam(this.props.location.search);
-        if(typeof param.id === "undefined"){
+        if(typeof param === "undefined"){
             param = {id:0};
         }
 
         this.state={
             blogs: [],
-            filter: "all",
             total: 0,
             pageSize: 10,
-            userID: param.id
+            userID: param.id,
+            filter:"全部"
         };
     }
 
@@ -38,7 +39,6 @@ export default class BlogManage extends React.Component {
         let {userID} = this.state;
 
         AjxRequest.getArticlesByUserID(userID, data=>{
-            console.log(data);
             if(data.code === 0){
                 this.setState({
                     blogs: data.message,
@@ -63,16 +63,44 @@ export default class BlogManage extends React.Component {
         });
     }
 
-    callback = (key) => {
-        console.log(key);
+    handleSelectChange = (value) => {
+        let {userID} = this.state;
+
+        if(value === "all"){
+            AjxRequest.getArticlesByUserID(userID, data=>{
+                if(data.code === 0){
+                    this.setState({
+                        blogs: data.message,
+                        total: data.message.length,
+                        filter:"全部"
+                    });
+                }else{
+                    message.error(data.message);
+                }
+            });
+        }else if(value === "published"){
+            AjxRequest.getPublishArticles(userID, data=>{
+                if(data.code === 0){
+                    this.setState({
+                        blogs: data.message,
+                        total: data.message.length,
+                        filter:"已发布"
+                    });
+                }else{
+                    message.error(data.message);
+                }
+            });
+        }else if(value === "draft"){
+            this.setState({
+                blogs: [],
+                total: 0,
+                filter:"草稿"
+            });
+        }
     }
 
-    handleSelectChange = (value) => {
-        console.log(`selected ${value}`);
-      }
-
     render() {
-        var {blogs, total, pageSize} = this.state;
+        var {blogs, total, pageSize, filter} = this.state;
 
         return(
             <DocumentTitle title='博客管理'>
@@ -80,6 +108,7 @@ export default class BlogManage extends React.Component {
                     <Breadcrumb>
                         <BreadcrumbItem>管理</BreadcrumbItem>
                         <BreadcrumbItem>博客管理</BreadcrumbItem>
+                        <BreadcrumbItem>{filter}</BreadcrumbItem>
                     </Breadcrumb>
                     <div >
                         <Select defaultValue="全部" style={{ marginRight: "20px", marginBottom: "20px", width: 290 }} onChange={this.handleSelectChange}>
@@ -131,13 +160,13 @@ export default class BlogManage extends React.Component {
                                     <img
                                         width={272}
                                         alt="logo"
-                                        src={"/api/viewArticleImage/" + item.Image}
+                                        src={"/viewArticleImage/" + item.Image}
                                     />
                                     }
                                 >
                                     <List.Item.Meta
-                                    avatar={<Avatar src={"/api/viewAvatar/"+item.UserID+"/"+item.User.Avatar} />}
-                                    title={<a href={item.href}>{item.Title}</a>}
+                                    avatar={<Avatar src={"/viewAvatar/"+item.UserID+"/"+item.User.Avatar} />}
+                                    title={<Link to={"/detail?key="+item.Key}>{item.Title}</Link>}
                                     />
                                     <p style={{wordWrap: "break-word"}}>{item.Summary}</p>
                                 </List.Item>

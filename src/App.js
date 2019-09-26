@@ -19,7 +19,8 @@ import {
 import "./static/css/App.css"
 import "./static/css/bootstrap.min.css"
 import {menuGenerator} from "./utils/MenuGenerator"
-import Blog from "./pages/Blog"
+import Blog from "./pages/Blog.js"
+import BlogSearch from "./pages/BlogSearch"
 import Topic from "./pages/Topic.js"
 import Personal from "./pages/Personal.js"
 import About from "./pages/About.js"
@@ -118,14 +119,11 @@ export default class App extends React.Component {
                               </UncontrolledDropdown>
                         );
                       }
-                      let obj = {
-                        pathname: item.href,
-                        query: { user }
-                      }
+ 
                       return (
                         <NavItem key={item.key} style={{textAlign:"center"}}>
                             <Button color="link">
-                              <Link className="link" to={obj}>{item.text}</Link>
+                              <Link className="link" to={item.href}>{item.text}</Link>
                             </Button>
                         </NavItem>
                       );
@@ -142,7 +140,7 @@ export default class App extends React.Component {
         <Container>
             <Switch>
                 <Route exact path="/" component={Blog}/>
-                <Route exact path="/blog" component={Blog}/>
+                <Route exact path="/blogsearch" component={BlogSearch}/>
                 <Route exact path="/topic" component={Topic}/>
                 <Route exact path="/detail" component={Detail}/>
                 <Route exact path="/noauth" component={NoAuth}/>
