@@ -43,7 +43,7 @@ class LoginRegister extends React.Component{
         OpCookies.save("token", msg);
         //解析jwt token
         const decoded = jwt_decode(msg);
-        let avatarUrl = "/api/viewAvatar/"+decoded.id+"/"+decoded.avatar
+        let avatarUrl = "/viewAvatar/"+decoded.id+"/"+decoded.avatar
 
         //通知父组件登录成功
         loginStateChange("login", decoded);
@@ -76,7 +76,7 @@ class LoginRegister extends React.Component{
                 loginStateChange("logout", null);
             }
 
-            this.setState({loginButtonContent: "登录/注册录", isLogin: false });
+            this.setState({loginButtonContent: "登录/注册录", isLogin: false, avatarUrl:"" });
         }
       }
 

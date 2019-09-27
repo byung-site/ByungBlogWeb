@@ -195,7 +195,7 @@ class AJXRequest{
 
         fromData.append('userId', userId);
         fromData.append('newNickname', newNickname);
-        this.postRequest("/changeNickname", fromData, callback);
+        this.postRequest("/api/changeNickname", fromData, callback);
     }
 
     //改邮箱
@@ -204,7 +204,7 @@ class AJXRequest{
 
         fromData.append('userId', userId);
         fromData.append('newEmail', newEmail);
-        this.postRequest("/changeEmail", fromData, callback);
+        this.postRequest("/api/changeEmail", fromData, callback);
     }
 
     //改密码
@@ -215,7 +215,7 @@ class AJXRequest{
         fromData.append('oldPass', oldPass);
         fromData.append('newPass', newPass);
         fromData.append('confirmPass', confirmPass);
-        this.postRequest("/changePassword", fromData, callback);
+        this.postRequest("/api/changePassword", fromData, callback);
     }
 };
 
