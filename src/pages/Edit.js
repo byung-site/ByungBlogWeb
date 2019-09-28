@@ -208,7 +208,7 @@ class Edit extends Component {
                 <div>
                     <Breadcrumb>
                         <BreadcrumbItem>管理</BreadcrumbItem>
-                        <BreadcrumbItem><Link to={"/blogmanage?id="+user.id}>博客管理</Link></BreadcrumbItem>
+                        <BreadcrumbItem><Link to={"/articlemanage?id="+user.id}>文章管理</Link></BreadcrumbItem>
                         <BreadcrumbItem>编辑</BreadcrumbItem>
                     </Breadcrumb>
                     <div>

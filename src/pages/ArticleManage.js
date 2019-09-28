@@ -17,7 +17,7 @@ const IconText = ({ type, text }) => (
 
 const { Option } = Select;
 
-export default class BlogManage extends React.Component {
+export default class AritcleManage extends React.Component {
     constructor(props){
         super(props);
 
@@ -27,7 +27,7 @@ export default class BlogManage extends React.Component {
         }
 
         this.state={
-            blogs: [],
+            articleArray: [],
             total: 0,
             pageSize: 10,
             userID: param.id,
@@ -41,7 +41,7 @@ export default class BlogManage extends React.Component {
         AjxRequest.getArticlesByUserID(userID, data=>{
             if(data.code === 0){
                 this.setState({
-                    blogs: data.message,
+                    articleArray: data.message,
                     total: data.message.length
                 });
             }else{
@@ -51,13 +51,13 @@ export default class BlogManage extends React.Component {
     }
 
     deleteBlog = (id) =>{
-        let {blogs} = this.state;
+        let {articleArray} = this.state;
 
-        blogs.forEach((item, index, blogs)=>{
+        articleArray.forEach((item, index, articleArray)=>{
             if(item.ID === id) {
-                blogs.splice(index, 1);
+                articleArray.splice(index, 1);
                 this.setState({
-                    blogs
+                    articleArray
                 });
             }
         });
@@ -70,7 +70,7 @@ export default class BlogManage extends React.Component {
             AjxRequest.getArticlesByUserID(userID, data=>{
                 if(data.code === 0){
                     this.setState({
-                        blogs: data.message,
+                        articleArray: data.message,
                         total: data.message.length,
                         filter:"全部"
                     });
@@ -82,7 +82,7 @@ export default class BlogManage extends React.Component {
             AjxRequest.getPublishArticles(userID, data=>{
                 if(data.code === 0){
                     this.setState({
-                        blogs: data.message,
+                        articleArray: data.message,
                         total: data.message.length,
                         filter:"已发布"
                     });
@@ -92,7 +92,7 @@ export default class BlogManage extends React.Component {
             });
         }else if(value === "draft"){
             this.setState({
-                blogs: [],
+                articleArray: [],
                 total: 0,
                 filter:"草稿"
             });
@@ -100,14 +100,14 @@ export default class BlogManage extends React.Component {
     }
 
     render() {
-        var {blogs, total, pageSize, filter} = this.state;
+        var {articleArray, total, pageSize, filter} = this.state;
 
         return(
-            <DocumentTitle title='博客管理'>
+            <DocumentTitle title='文章管理'>
                 <div>
                     <Breadcrumb>
                         <BreadcrumbItem>管理</BreadcrumbItem>
-                        <BreadcrumbItem>博客管理</BreadcrumbItem>
+                        <BreadcrumbItem>文章管理</BreadcrumbItem>
                         <BreadcrumbItem>{filter}</BreadcrumbItem>
                     </Breadcrumb>
                     <div >
@@ -118,7 +118,7 @@ export default class BlogManage extends React.Component {
                         </Select>
                         <Button  type="primary" style={{width: 290 }} onClick={e => {
                             this.props.history.push('/edit?key=');
-                        }}>编写博客</Button>
+                        }}>编写文章</Button>
                     </div>
                     <div style={{marginTop:"20px"}}>
                         <List
@@ -134,7 +134,7 @@ export default class BlogManage extends React.Component {
                                 total:total,
                                 position:"bottom"
                             }}
-                            dataSource={blogs}
+                            dataSource={articleArray}
                             renderItem={item => (
                                 <List.Item
                                     key={item.ID}

@@ -68,7 +68,7 @@ export default class Topic extends React.Component {
                                         <IconText type="book" text={item.ArticleNum} key="list-vertical-star-o" />
                                     ]}
                                 >
-                                    <Link to={"/blogsearch?id="+item.ID+"&topic="+item.Name}>{item.Name}</Link>
+                                    <Link to={"/articlesearch?id="+item.ID+"&topic="+item.Name}>{item.Name}</Link>
                                 </List.Item>
                             )}
                         />

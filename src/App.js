@@ -19,12 +19,12 @@ import {
 import "./static/css/App.css"
 import "./static/css/bootstrap.min.css"
 import {menuGenerator} from "./utils/MenuGenerator"
-import Blog from "./pages/Blog.js"
-import BlogSearch from "./pages/BlogSearch"
+import Home from "./pages/Home.js"
+import ArticleSearch from "./pages/ArticleSearch"
 import Topic from "./pages/Topic.js"
 import Personal from "./pages/Personal.js"
 import About from "./pages/About.js"
-import BlogManage from './pages/BlogManage';
+import ArticleManage from './pages/ArticleManage';
 import TopicManage from './pages/TopicManage';
 import NotFound from './pages/NotFound';
 import NoAuth from './pages/NoAuth';
@@ -140,13 +140,13 @@ export default class App extends React.Component {
         </header>
         <Container>
             <Switch>
-                <Route exact path="/" component={Blog}/>
-                <Route exact path="/blogsearch" component={BlogSearch}/>
+                <Route exact path="/" component={Home}/>
+                <Route exact path="/articlesearch" component={ArticleSearch}/>
                 <Route exact path="/topic" component={Topic}/>
                 <Route exact path="/detail" component={Detail}/>
                 <Route exact path="/noauth" component={NoAuth}/>
                 <Route exact path="/about" component={About}/>
-                <AuthRouter path="/blogmanage" isLogin={isLogin} component={BlogManage}/>
+                <AuthRouter path="/articlemanage" isLogin={isLogin} component={ArticleManage}/>
                 <AuthRouter path="/topicmanage" isLogin={isLogin} component={TopicManage}/>
                 <AuthRouter path="/personal" isLogin={isLogin} component={Personal}/>
                 <AuthRouter path="/edit" isLogin={isLogin} component={Edit}/>

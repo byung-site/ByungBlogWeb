@@ -14,12 +14,12 @@ const IconText = ({ type, text }) => (
     </span>
   );
 
-export default class Blog extends React.Component {
+export default class Home extends React.Component {
     constructor(props){
         super(props);
 
         this.state = {
-            blogs: [],
+            articleArray: [],
             total: 0,
             pageSize: 10,
         };
@@ -29,7 +29,7 @@ export default class Blog extends React.Component {
         AjxRequest.getArticles(data=>{
             if(data.code === 0){
                 this.setState({
-                    blogs: data.message,
+                    articleArray: data.message,
                     total: data.message.length,
                 });
             }else{
@@ -39,13 +39,13 @@ export default class Blog extends React.Component {
     }
 
     render() {
-        var {blogs, total, pageSize} = this.state;
+        var {articleArray, total, pageSize} = this.state;
 
         return(
             <DocumentTitle title='博客'>
                 <div>
                     <Breadcrumb>
-                        <BreadcrumbItem>博客</BreadcrumbItem>
+                        <BreadcrumbItem>文章</BreadcrumbItem>
                         <BreadcrumbItem>全部</BreadcrumbItem>
                     </Breadcrumb>
                     <div>
@@ -62,7 +62,7 @@ export default class Blog extends React.Component {
                             total:total,
                             position:"bottom"
                         }}
-                        dataSource={blogs}
+                        dataSource={articleArray}
                         renderItem={item => (
                             <List.Item
                                 key={item.ID}
