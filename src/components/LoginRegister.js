@@ -6,6 +6,7 @@ import jwt_decode from 'jwt-decode'
 import {OpCookies} from "../utils/OPCookies"
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
+import avatar from "../static/image/avatar.jpg"
 
 
 
@@ -93,10 +94,17 @@ class LoginRegister extends React.Component{
 
     render(){
         const {visible, currentTab, avatarUrl} = this.state;
+        let avatar_ = {};
+
+        if(avatarUrl === ""){
+            avatar_ = avatar;
+        }else{
+            avatar_ = avatarUrl;
+        }
 
         return(
             <div>
-                <Avatar src={avatarUrl} />
+                <Avatar src={avatar_} />
                 <Button type="link" onClick={this.loginRegiterButtonClick}>{this.state.loginButtonContent}</Button>
                 <Modal
                 visible={visible}

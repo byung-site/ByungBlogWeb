@@ -42,7 +42,7 @@ export default class Home extends React.Component {
         var {articleArray, total, pageSize} = this.state;
 
         return(
-            <DocumentTitle title='博客'>
+            <DocumentTitle title='文章'>
                 <div>
                     <Breadcrumb>
                         <BreadcrumbItem>文章</BreadcrumbItem>

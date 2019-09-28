@@ -1,6 +1,6 @@
 
 var narmalMenu=[
-    {text:"博客", href:"/", key:"/"},
+    {text:"文章", href:"/", key:"/"},
     {text:"话题", href:"/topic", key:"/topic"},
     {text:"关于博主", href:"/about", key:"/about"}
 ];
