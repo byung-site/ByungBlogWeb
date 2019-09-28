@@ -13,10 +13,10 @@ const { Step } = Steps;
 export default class About extends React.Component {
     render() {
         return(
-            <DocumentTitle title='关于站主'>
+            <DocumentTitle title='关于站长'>
                 <div>
                     <Breadcrumb>
-                        <BreadcrumbItem>关于站主</BreadcrumbItem>
+                        <BreadcrumbItem>关于站长</BreadcrumbItem>
                     </Breadcrumb>
 
                  

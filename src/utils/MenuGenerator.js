@@ -2,7 +2,7 @@
 var narmalMenu=[
     {text:"文章", href:"/", key:"/"},
     {text:"话题", href:"/topic", key:"/topic"},
-    {text:"关于站主", href:"/about", key:"/about"}
+    {text:"关于站长", href:"/about", key:"/about"}
 ];
 var manageMenu = [
     {type:0, text:"文章", href:"/", key:"/"},
@@ -12,7 +12,7 @@ var manageMenu = [
                                 {text:"话题管理", href:"/topicmanage", key:"/topicmanage"}
                                 ]},
     {type:0, text:"个人中心", href:"/personal", key:"/personal"},
-    {type:0, text:"关于站主", href:"/about", key:"/about"}
+    {type:0, text:"关于站长", href:"/about", key:"/about"}
 ];
 
 class MenuGenerator {

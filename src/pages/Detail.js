@@ -1,6 +1,8 @@
 import React from 'react';
 import MarkdownIt from 'markdown-it'
+import {Button} from "antd"
 import hljs  from 'highlight.js'
+import 'highlight.js/styles/github.css';
 
 import DocumentTitle from '../components/DocumentTitle'
 import {localParam} from "../utils/LocalParam"
@@ -19,7 +21,7 @@ export default class Detail extends React.Component {
 
         
         this.state={
-            article:{Title:"", Key: param.key, Content:""}
+            article:{UpdatedAt:"", CreatedAt:"", Title:"", Key: param.key, Content:"",User:{Nickname:""}}
         };
 
         // initial a parser
@@ -56,10 +58,22 @@ export default class Detail extends React.Component {
         var articleContent = this.mdParser.render(article.Content);
         return(
             <DocumentTitle title={article.Title}>
-                <div>
-                    <div>
-                        <h1 style={{textAlign:"center"}}>{article.Title}</h1>
-                        <div dangerouslySetInnerHTML = {{__html:articleContent}} ></div>
+                <div style={{marginTop:20}}>
+                    <h1 style={{textAlign:"center",  backgroundColor:"#f0f0f0"}}>
+                        {article.Title}
+                    </h1>
+                    <div style={{textAlign:"center"}}>
+                        <p>作者：{article.User.Nickname}</p> 
+                        <p>更新时间：{article.UpdatedAt.substring(0, 10)}</p>
+                    </div>
+                    <div 
+                        className="MarkdownWrap"
+                        dangerouslySetInnerHTML = {{__html:articleContent}} 
+                    ></div>
+
+                    <div style={{marginBottom:20}}>
+                        <Button>上一篇</Button>
+                        <Button style={{float:"right"}}>下一篇</Button>
                     </div>
                 </div>
             </DocumentTitle>
