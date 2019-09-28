@@ -32,6 +32,7 @@ import Edit from './pages/Edit';
 import Detail from "./pages/Detail"
 import AuthRouter from "./components/AuthRouter"
 import LoginRegister from "./components/LoginRegister"
+import logo from "./static/image/logo.png"
 
 const { Footer } = Layout;
 
@@ -93,7 +94,7 @@ export default class App extends React.Component {
       <div style={{minWidth:"320px"}}>
         <header style={{width:"100%",background:"#343a40"}}>
           <Navbar className="m-auto" color="dark" dark expand="md" style={{maxWidth:"1200px"}}>
-            <Button color="link"><Link className="link" to="/">byung</Link></Button>
+              <img alt="logo" src={logo} style={{width:128, height:50}}></img>
               <NavbarToggler onClick={this.menuToggle} />
               <Collapse isOpen={this.state.isOpen} navbar>
                 <Nav className="ml-auto" navbar>
