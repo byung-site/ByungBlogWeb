@@ -2,7 +2,7 @@
 var narmalMenu=[
     {text:"文章", href:"/", key:"/"},
     {text:"话题", href:"/topic", key:"/topic"},
-    {text:"关于博主", href:"/about", key:"/about"}
+    {text:"关于站主", href:"/about", key:"/about"}
 ];
 var manageMenu = [
     {type:0, text:"文章", href:"/", key:"/"},

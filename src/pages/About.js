@@ -13,19 +13,19 @@ const { Step } = Steps;
 export default class About extends React.Component {
     render() {
         return(
-            <DocumentTitle title='关于博主'>
+            <DocumentTitle title='关于站主'>
                 <div>
                     <Breadcrumb>
-                        <BreadcrumbItem>关于博主</BreadcrumbItem>
+                        <BreadcrumbItem>关于站主</BreadcrumbItem>
                     </Breadcrumb>
 
                  
-                    <div style={{width:500, margin:"0 auto"}}>
-                        <Card title="博主时间轴" style={{ width: 500 }}>
+                    <div style={{minWidth:300, maxWidth:500, margin:"0 auto"}}>
+                        <Card title="博主时间轴">
                             <Steps direction="vertical" size="small" current={2}>
                                 <Step title="成都大学(2015.9-2019.6)" description="博主所学专业为计算机科学与技术" />
                                 <Step title="实习-安恒信息(2018.8-2019.6)" description="实习期间做了个简易的远程的图形界面环境，用于公司的产品。
-                                该项目没用图形库通过像素点绘出来的，鼠标键盘时件也是自己处理的，这么做的目的是减少资源消耗同时渲染层还要是RDP协议。" />
+                                该项目没用图形库,界面是通过像素点绘出来的，鼠标键盘时件也是自己处理的，这么做的目的是减少资源消耗同时渲染层还要是RDP协议。" />
                                 <Step title="正式-安恒信息(2019.7-至今)" description="负责堡垒机后端RDP和VNC协议的开发和维护。工作中会用到c语言和go语言。" />
                             </Steps>
                         </Card>
@@ -42,7 +42,7 @@ export default class About extends React.Component {
                                 </Card>
                             </Col>
                         </Row>
-                        <Alert message="加好友请发送备注，否则会被拒绝" type="success" />
+                        <Alert message="加好友请发送备注，否则会被拒绝" type="success" style={{marginBottom:20}}/>
                     </div>
                 </div>
             </DocumentTitle>
