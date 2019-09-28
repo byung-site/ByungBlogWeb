@@ -153,7 +153,7 @@ export default class App extends React.Component {
             </Switch>
         </Container>
         
-        <Footer style={{ textAlign: 'center' }}><p>Copyright © 2019 byung.site All Rights Reserved.</p><p>Email:zhuguoquan45@163.com</p></Footer>
+        <Footer style={{ textAlign: 'center' }}><p>Copyright © 2019 byung.site All Rights Reserved.</p><p>Email:byungsite@foxmail.com</p></Footer>
       </div>
     );
   }
