@@ -80,6 +80,13 @@ export default class Home extends React.Component {
                                 <List.Item.Meta
                                 avatar={<Avatar src={"/viewAvatar/"+item.UserID+"/"+item.User.Avatar} />}
                                 title={<Link to={"/detail?key="+item.Key}>{item.Title}</Link>}
+                                description={
+                                    <div>
+                                        <font>作者：{item.User.Nickname}</font><br/>
+                                        <font>创建：{item.CreatedAt.substring(0, 16)}</font><br/>
+                                        <font>更新：{item.UpdatedAt.substring(0, 16)}</font>
+                                    </div>
+                                }
                                 />
                                 <p style={{wordWrap: "break-word"}}>{item.Summary}</p>
                             </List.Item>

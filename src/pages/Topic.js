@@ -68,7 +68,17 @@ export default class Topic extends React.Component {
                                         <IconText type="book" text={item.ArticleNum} key="list-vertical-star-o" />
                                     ]}
                                 >
-                                    <Link to={"/articlesearch?id="+item.ID+"&topic="+item.Name}>{item.Name}</Link>
+                                     <List.Item.Meta
+                                        // avatar={<Avatar src={"/viewAvatar/"+item.UserID+"/"+item.User.Avatar} />}
+                                        title={<Link to={"/articlesearch?id="+item.ID+"&topic="+item.Name}>{item.Name}</Link>}
+                                        description={
+                                            <div>
+                                                <font>创建：{item.CreatedAt.substring(0, 16)}</font><br/>
+                                                <font>更新：{item.UpdatedAt.substring(0, 16)}</font>
+                                            </div>
+                                        }
+                                    />
+                                    
                                 </List.Item>
                             )}
                         />
