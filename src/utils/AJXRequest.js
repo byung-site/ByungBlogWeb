@@ -77,7 +77,7 @@ class AJXRequest{
 
     //得到指定key的文章
     getArticle = (key, callback) =>{
-        this.getRequest("/api/getArticle/" + key, callback)
+        this.getRequest("/getArticle/" + key, callback)
     }
 
     //得到所有话题
