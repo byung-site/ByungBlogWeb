@@ -100,7 +100,7 @@ class Edit extends Component {
         var htmlStr = this.mdParser.render(markdownString);
         var dd=htmlStr.replace(/<\/?.+?>/g,"");
         var dds=dd.replace(/ /g," ");//剔除空格
-        var summary = dds.replace(/[\r\n]/g,"").substring(0, 200);//剔除换行符和截取前200字符
+        var summary = dds.replace(/[\r\n]/g,"").substring(0, 400);//剔除换行符和截取前200字符
         
         return summary;
     }
