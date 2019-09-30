@@ -105,9 +105,9 @@ export default class BlogSearch extends React.Component {
                                 title={<Link to={"/detail?key="+item.Key}>{item.Title}</Link>}
                                 description={
                                     <div>
+                                        <font>话题：{item.Topic.Name}</font><br/>
                                         <font>作者：{item.User.Nickname}</font><br/>
                                         <font>创建：{item.CreatedAt.substring(0, 16)}</font><br/>
-                                        <font>更新：{item.UpdatedAt.substring(0, 16)}</font>
                                     </div>
                                 }
                                 />

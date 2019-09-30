@@ -21,7 +21,7 @@ export default class Detail extends React.Component {
 
         
         this.state={
-            article:{UpdatedAt:"", CreatedAt:"", Title:"", Key: param.key, Content:"",User:{Nickname:""}}
+            article:{UpdatedAt:"", CreatedAt:"", Title:"", Key: param.key, Content:"",User:{Nickname:""}, Topic:{Name:""}}
         };
 
         // initial a parser
@@ -63,8 +63,9 @@ export default class Detail extends React.Component {
                         {article.Title}
                     </h1>
                     <div style={{textAlign:"center"}}>
-                        <p>作者：{article.User.Nickname}</p> 
-                        <p>更新时间：{article.UpdatedAt.substring(0, 10)}</p>
+                        <font>更新时间：{article.UpdatedAt.substring(0, 16)}</font><br/>
+                        <font>话题：{article.Topic.Name}</font><br/>
+                        <font>作者：{article.User.Nickname}</font>
                     </div>
                     <div 
                         className="MarkdownWrap"

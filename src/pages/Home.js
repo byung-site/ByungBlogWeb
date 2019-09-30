@@ -42,7 +42,7 @@ export default class Home extends React.Component {
         var {articleArray, total, pageSize} = this.state;
 
         return(
-            <DocumentTitle title='文章'>
+            <DocumentTitle title='byung'>
                 <div>
                     <Breadcrumb>
                         <BreadcrumbItem>文章</BreadcrumbItem>
@@ -82,9 +82,9 @@ export default class Home extends React.Component {
                                 title={<Link to={"/detail?key="+item.Key}>{item.Title}</Link>}
                                 description={
                                     <div>
+                                        <font>话题：{item.Topic.Name}</font><br/>
                                         <font>作者：{item.User.Nickname}</font><br/>
-                                        <font>创建：{item.CreatedAt.substring(0, 16)}</font><br/>
-                                        <font>更新：{item.UpdatedAt.substring(0, 16)}</font>
+                                        <font>创建：{item.CreatedAt.substring(0, 16)}</font>
                                     </div>
                                 }
                                 />
