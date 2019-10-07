@@ -83,7 +83,6 @@ class Edit extends Component {
                 if(data.code === 0){
                     for(var i=0;i<topics.length;i++){
                         if(topics[i].ID === data.message.TopicID){
-                            console.log(topics[i].Name);
                             defaultTopic=topics[i].Name;
                         }
                     }
@@ -100,7 +99,7 @@ class Edit extends Component {
         var htmlStr = this.mdParser.render(markdownString);
         var dd=htmlStr.replace(/<\/?.+?>/g,"");
         var dds=dd.replace(/ /g," ");//剔除空格
-        var summary = dds.replace(/[\r\n]/g,"").substring(0, 400);//剔除换行符和截取前200字符
+        var summary = dds.replace(/[\r\n]/g,"").substring(0, 400) + "...";//剔除换行符和截取前200字符
         
         return summary;
     }
@@ -129,7 +128,7 @@ class Edit extends Component {
 
         AjxRequest.uploadArticleImage(user.id, article.Key ,file, data =>{
             if(data.code === 0){
-                callback("/api/viewArticleImage/"+data.message);
+                callback("/viewArticleImage/"+data.message);
             }else{
                 message.error(data.message);
             }

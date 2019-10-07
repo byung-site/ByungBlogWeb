@@ -21,7 +21,9 @@ export default class Detail extends React.Component {
 
         
         this.state={
-            article:{UpdatedAt:"", CreatedAt:"", Title:"", Key: param.key, Content:"",User:{Nickname:""}, Topic:{Name:""}}
+            article:{UpdatedAt:"", CreatedAt:"", Title:"", Key: param.key, Content:"",User:{Nickname:""}, Topic:{Name:""}},
+            next:{Title:"", Key: ""},
+            previous:{ Title:"", Key: ""}
         };
 
         // initial a parser
@@ -42,9 +44,39 @@ export default class Detail extends React.Component {
     }
 
     componentWillMount(){
-        let {article} = this.state;
+        this.getArticleDeatil(this.state.article);
+    }
+        
+    getArticleDeatil = (article) =>{
+        let {next, previous} = this.state;
 
         AjxRequest.getArticle(article.Key, data=>{
+            AjxRequest.getNext(data.message.TopicID, data.message.Key, data=>{
+               if (data.code === 0){
+                    this.setState({
+                        next: data.message,
+                    });
+               }else if(data.code === 1){
+                   next.Title = data.message;
+                   this.setState({
+                    next,
+                });
+               }
+            });
+    
+            AjxRequest.getPrevious(data.message.TopicID, data.message.Key, data=>{
+                if (data.code === 0){
+                    this.setState({
+                        previous: data.message,
+                    });
+               }else if(data.code === 1){
+                    previous.Title = data.message;
+                   this.setState({
+                    previous,
+                });
+               }
+            });
+
             if(data.code === 0){
                 this.setState({
                     article: data.message,
@@ -54,8 +86,9 @@ export default class Detail extends React.Component {
     }
 
     render() {
-        let {article} = this.state;
+        let {article, previous, next} = this.state;
         var articleContent = this.mdParser.render(article.Content);
+
         return(
             <DocumentTitle title={article.Title}>
                 <div style={{marginTop:20}}>
@@ -72,9 +105,25 @@ export default class Detail extends React.Component {
                         dangerouslySetInnerHTML = {{__html:articleContent}} 
                     ></div>
 
+                    <div style={{marginTop:40}}>
+                        <Button onClick={e=>{
+                            let {previous} = this.state;
+
+                            if (previous.Key !== ""){
+                                this.getArticleDeatil(previous);
+                            }
+                        }}>上一篇</Button>
+                        <Button style={{float:"right"}} onClick={e=>{
+                            let {next} = this.state;
+
+                            if (next.Key !== ""){
+                                this.getArticleDeatil(next);
+                            }
+                        }}>下一篇</Button>
+                    </div>
                     <div style={{marginBottom:20}}>
-                        <Button>上一篇</Button>
-                        <Button style={{float:"right"}}>下一篇</Button>
+                        <font>{previous.Title}</font>
+                        <font style={{float:"right"}}>{next.Title}</font>
                     </div>
                 </div>
             </DocumentTitle>

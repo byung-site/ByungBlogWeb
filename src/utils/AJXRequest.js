@@ -80,6 +80,16 @@ class AJXRequest{
         this.getRequest("/getArticle/" + key, callback)
     }
 
+    //得到同话题的下一篇文章
+    getNext = (topicId, key, callback) =>{
+        this.getRequest("/getNext/" + topicId + "/"+ key, callback)
+    }
+
+    //得到同话题的上一篇文章
+    getPrevious = (topicId, key, callback) =>{
+        this.getRequest("/getPrevious/" + topicId + "/"+ key, callback)
+    }
+
     //得到所有话题
     getTopics = (callback) => {
         this.getRequest("/getTopics", callback);
