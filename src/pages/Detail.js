@@ -1,6 +1,6 @@
 import React from 'react';
 import MarkdownIt from 'markdown-it'
-import {Button} from "antd"
+import {Button, message} from "antd"
 import hljs  from 'highlight.js'
 import 'highlight.js/styles/github.css';
 
@@ -51,36 +51,40 @@ export default class Detail extends React.Component {
         let {next, previous} = this.state;
 
         AjxRequest.getArticle(article.Key, data=>{
-            AjxRequest.getNext(data.message.TopicID, data.message.Key, data=>{
-               if (data.code === 0){
-                    this.setState({
-                        next: data.message,
-                    });
-               }else if(data.code === 1){
-                   next.Title = data.message;
-                   this.setState({
-                    next,
-                });
-               }
-            });
-    
-            AjxRequest.getPrevious(data.message.TopicID, data.message.Key, data=>{
-                if (data.code === 0){
-                    this.setState({
-                        previous: data.message,
-                    });
-               }else if(data.code === 1){
-                    previous.Title = data.message;
-                   this.setState({
-                    previous,
-                });
-               }
-            });
-
             if(data.code === 0){
+                AjxRequest.getNext(data.message.TopicID, data.message.Key, data=>{
+                if (data.code === 0){
+                        this.setState({
+                            next: data.message,
+                        });
+                }else if(data.code === 1){
+                    next.Title = data.message;
+                    this.setState({
+                        next,
+                    });
+                }
+                });
+        
+                AjxRequest.getPrevious(data.message.TopicID, data.message.Key, data=>{
+                    if (data.code === 0){
+                        this.setState({
+                            previous: data.message,
+                        });
+                }else if(data.code === 1){
+                        previous.Title = data.message;
+                    this.setState({
+                        previous,
+                    });
+                }
+                });
+
                 this.setState({
                     article: data.message,
                 });
+
+                AjxRequest.updateVisit(data.message.Key, data=>{});
+            }else{
+                message.error(data.message);
             }
         });
     }
