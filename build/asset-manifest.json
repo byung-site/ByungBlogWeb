@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/static/css/main.298a15e7.chunk.css",
+    "main.js": "/static/js/main.c09e16a7.chunk.js",
+    "runtime~main.js": "/static/js/runtime~main.beab51f3.js",
+    "static/css/2.e3bc370a.chunk.css": "/static/css/2.e3bc370a.chunk.css",
+    "static/js/2.7a70f617.chunk.js": "/static/js/2.7a70f617.chunk.js",
+    "index.html": "/index.html",
+    "precache-manifest.64d2bb0a423fc99f3edf6cf29c3e70ec.js": "/precache-manifest.64d2bb0a423fc99f3edf6cf29c3e70ec.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.e3bc370a.chunk.css.map": "/static/css/2.e3bc370a.chunk.css.map",
+    "static/css/main.298a15e7.chunk.css.map": "/static/css/main.298a15e7.chunk.css.map",
+    "static/media/avatar.jpg": "/static/media/avatar.9bd06067.jpg",
+    "static/media/qq.jpg": "/static/media/qq.ea11c962.jpg",
+    "static/media/wechat.png": "/static/media/wechat.dd025405.png"
+  }
+}
